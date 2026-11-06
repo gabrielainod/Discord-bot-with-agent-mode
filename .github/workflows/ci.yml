@@ -1,0 +1,19 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pyflakes
+      - name: Lint
+        run: python -m pyflakes tripletbot tools
+      - name: Every game must play a full match and render
+        run: python tools/selftest.py
