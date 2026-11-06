@@ -15,7 +15,7 @@ whose turn it is. Players interact through Discord buttons, dropdowns and typed 
 - [The 24 games](#the-24-games)
 - [Commands](#commands)
 - [Quick start (5 minutes)](#quick-start-5-minutes)
-- [Deploy so it runs 24/7](#deploy-so-it-runs-247)
+- [Deploy so it runs 24/7](#deploy-so-it-runs-247--no-github-needed)
 - [Try it without Discord](#try-it-without-discord)
 - [Playing against other bots](#playing-against-other-bots)
 - [How it works](#how-it-works)
@@ -113,6 +113,7 @@ Open the generated URL, pick your server, authorize.
 
 ```bash
 git clone https://github.com/gabrielainod/Discord-bot-with-agent-mode
+# (or just download dist/triplettbot.zip and unzip it — same thing)
 cd Discord-bot-with-agent-mode
 pip install -r requirements.txt
 cp .env.example .env          # paste your token into DISCORD_TOKEN
@@ -125,27 +126,21 @@ set `GUILD_ID=<your server id>` in `.env` to sync instantly while testing.
 
 ---
 
-## Deploy so it runs 24/7
+## Deploy so it runs 24/7 — no GitHub needed
 
-Any host that runs Docker or Python works. Two phone-friendly options:
+Everything you need is packed in **`dist/triplettbot.zip`** (1 MB, 43 files, includes the
+fonts). Upload it, unzip it, set `DISCORD_TOKEN`, run `python main.py`. That is the whole
+contract — no git, no repository, no CI.
 
-**Railway / Render / Fly.io (no terminal)**
+Three phone-friendly routes, with exact steps in **[HOSTING.md](HOSTING.md)**:
 
-1. Fork this repository (or push it to your own GitHub).
-2. New service → *Deploy from GitHub* → pick the repo. The included `Dockerfile` is detected.
-3. Add environment variable `DISCORD_TOKEN=<your token>`.
-4. Deploy. The bot connects and syncs `/play` automatically.
+| Route | Cost | How it works |
+|---|---|---|
+| **Panel with ZIP upload** (Pterodactyl-style) | free tiers exist | create server → File Manager → upload `triplettbot.zip` → *Unarchive* → add `DISCORD_TOKEN` → Start |
+| **VPS / shell you can reach** | ~US$3–5/mo | `unzip` → `bash start.sh` (or the bundled `Dockerfile`) |
+| **Old Android phone (Termux)** | free, forever | `pkg install python python-pillow` → unzip → `python main.py`, keep it charging |
 
-**Docker anywhere**
-
-```bash
-docker build -t tripletbott .
-docker run -d --restart=always -e DISCORD_TOKEN=xxxx -v $(pwd)/data:/app/data tripletbott
-```
-
-Stats live in `data/stats.json` — mount `/app/data` to keep them across restarts.
-
----
+All of them use the same start command, so switching hosts later is copy-paste.
 
 ## Try it without Discord
 
